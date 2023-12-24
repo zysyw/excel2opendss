@@ -1,0 +1,14 @@
+{# param_library_template.j2 #}
+{% for param_dict in category_value %}
+  {% for param_key, param_value in param_dict.items() %}
+    {% if param_key == '导线' %}
+      {% for line in param_value %}
+new linecode.{{ line['导线型号'] }} R1={{ line['电阻(Ω/km)'] }} X1={{ line['电抗(Ω/km)'] }}
+      {% endfor %}
+    {% elif param_key == '变压器' %}
+      {% for transformer in param_value %}
+new XfmrCode.{{ transformer['变压器型号'] }} phases=3 windings=2 conns=[delta, wye] kVs=[{{ transformer['高压侧额定电压(kV)'] }}, {{ transformer['低压侧额定电压(kV)'] }}] kVAs=[{{ transformer['变压器容量(kVA)'] }}, {{ transformer['变压器容量(kVA)'] }}] XHL={{ transformer['短路电压百分比(%)'] }} %imag={{ transformer['空载电流百分比(%)'] }} %noloadloss={{ transformer['空载损耗(%)'] }} %loadloss={{ transformer['负载损耗(%)'] }}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}

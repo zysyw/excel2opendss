@@ -1,0 +1,19 @@
+{# distribution_line_template.j2 #}
+{% for param_dict in category_value %}
+  {% for param_key, param_value in param_dict.items() %}
+    {% if param_key == '线段' %}
+      {% for line in param_value %}
+new line.{{ line['线段名称'] }} bus1={{ line['线段头母线'] }} bus2={{ line['线段尾母线'] }} Linecode={{ line['线路型号'] }} Length={{ line['线路长度(km)'] }}
+      {% endfor %}
+    {% elif param_key == '变压器' %}
+      {% for transformer in param_value %}
+new transformer.{{ transformer['变压器名称'] }} Buses=[{{ transformer['高压侧母线'] }}, {{ transformer['低压侧母线'] }}] XfmrCode={{ transformer['变压器类型'] }}-{{ transformer['变压器容量(kVA)'] }}
+      {% endfor %}
+    {% elif param_key == '平衡节点' %}
+      {% for BalanceBus in param_value %}
+! substation transformer
+new transformer.sub phases=3 windings=2 buses=[SourceBus,  {{ BalanceBus['平衡节点'] }}] kvs=[115, 10.5] kvas=[20000, 20000] XHL=7
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}

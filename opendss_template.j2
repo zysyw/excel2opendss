@@ -1,0 +1,21 @@
+{# opendss_template.j2 #}
+Clear
+! define circuit
+new circuit.CalcLineLoss basekv=115 1.00 0.0 50.0 3 20000 21000 4.0 3.0
+set basefrequency=50
+
+! {{ top_level_key }}
+{% for category_dict in top_level_data %}
+  {% for category_key, category_value in category_dict.items() %}
+  ! {{ category_key }}
+    {% if category_key == '参数库' %}
+      {% include 'param_library_template.j2' %}
+    {% endif %}
+    {% if category_key == '配电线路' %}
+      {% include 'distribution_line_template.j2' %}
+    {% endif %}
+    {% if category_key == '运行数据' %}
+      {% include 'running_data_template.j2' %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
