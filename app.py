@@ -24,10 +24,8 @@ def process_data():
         dss_script_filename = generate_dss_script(data)
 
         # 运行 OpenDSS 计算
-        run_opendss(dss_script_filename)
+        result = run_opendss(dss_script_filename)
 
-        # 获取并返回结果
-        result = get_opendss_results()
         return jsonify(result)
     else:
         # GET 请求，显示接收到的数据
@@ -80,14 +78,39 @@ def run_opendss(opendss_script_filename):
     dss.run_command(f"Redirect [{opendss_script_filename}]")
 
     dss.Solution.Solve()
+    
+    return {"Load Flow Completed": "Yes" if dss.Solution.Converged() else "No"}
 
-def get_opendss_results():
+@app.route('/get-voltages')
+def get_opendss_voltages():
     
-    print("Load Flow Completed:", "Yes" if dss.Solution.Converged() else "No")
+    #print("Load Flow Completed:", "Yes" if dss.Solution.Converged() else "No")
     voltages = dss.Circuit.AllBusMagPu()
-    print("Bus Voltages (pu):", voltages)
+    #print("Bus Voltages (pu):", voltages)
     
-    return {"result": "计算结果"}
+    return jsonify(voltages)
+
+@app.route('/get-line-currents')
+def get_line_currents():
+    line_names = dss.Lines.AllNames()
+    currents_data = {}
+
+    for name in line_names:
+        dss.Lines.Name(name)
+        currents = dss.CktElement.CurrentsMagAng()
+        currents_data[name] = currents
+
+    return jsonify(currents_data)
+
+
+@app.route('/get-meters')
+def get_opendss_meters():
+    
+    #print("Load Flow Completed:", "Yes" if dss.Solution.Converged() else "No")
+    meter_values = dss.Meters.RegisterValues()
+    print("Meter Values:", meter_values)
+    
+    return jsonify(meter_values)
 
 if __name__ == "__main__":
     app.run(debug=True)

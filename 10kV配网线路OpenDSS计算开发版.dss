@@ -25,6 +25,8 @@ new XfmrCode.S9-200 phases=3 windings=2 conns=[delta, wye] kVs=[10.5, 0.4] kVAs=
 ! substation transformer
 new transformer.sub phases=3 windings=2 buses=[SourceBus,  nc10kVbus] kvs=[115, 10.5] kvas=[20000, 20000] XHL=7
 new line.L1 bus1=nc10kVbus bus2=bus1 Linecode=LGJ-70 Length=0.8
+! first meter
+new EnergyMeter.nc10kVbus element=line.L1 1
 new line.L2 bus1=bus1 bus2=bus2 Linecode=LGJ-70 Length=0.7
 new line.L3 bus1=bus2 bus2=bus3 Linecode=LGJ-70 Length=1
 new line.L4 bus1=bus2 bus2=bus21 Linecode=LGJ-70 Length=0.3
@@ -38,3 +40,6 @@ new load.T1 bus1=T1 kv=0.4 kw=25 kvar=12.5
 new load.T21 bus1=T21 kv=0.4 kw=80 kvar=40
 new load.T22 bus1=T22 kv=0.4 kw=100 kvar=50
 new load.T3 bus1=T3 kv=0.4 kw=50 kvar=25
+
+set voltagebases = "110 10 0.38"
+calcv
