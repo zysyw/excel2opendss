@@ -1,5 +1,5 @@
 Clear
-! define circuit
+! define circuit 1
 new circuit.CalcLineLoss basekv=115 1.00 0.0 50.0 3 20000 21000 4.0 3.0
 set basefrequency=50
 

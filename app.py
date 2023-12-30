@@ -1,74 +1,43 @@
-from flask import Flask, request, jsonify, render_template_string
+import os
+from flask import Flask, request, jsonify
+from opendss_script.generate_dss_script import generate_dss_script
+from received_data import received_data_bp
+from opendss_script.generate_dss_script import opendss_script_bp
 import opendssdirect as dss
 
 app = Flask(__name__)
 
-# 使用一个全局变量来存储接收到的数据
-received_data = None
+# 使用config来保存需要显示的内容
+app.config['received_data'] = None
+app.config['opendss_script_file'] = None
+
+# 显示json数据、opendss脚本文件、opendss计算结果的蓝图
+app.register_blueprint(received_data_bp)
+app.register_blueprint(opendss_script_bp)
+
+# 初始化 OpenDSS
+#dss.Basic.Start(0)
+#app.config['dss'] = dss  # 将 OpenDSS 实例存储在 app.config 中
 
 @app.route('/')
-def hello():
-    return 'Hello, World!'
+def index():
+    return '这是一个线损计算服务，前端利用Excel输入格式化数据，后端利用jinja2模板将json数据转换成opendss脚本文件，再利用opendssdirect.py进行计算。'
 
-@app.route('/process-data', methods=['GET', 'POST'])
+@app.route('/process-data', methods=['POST'])
 def process_data():
-    global received_data
-    if request.method == 'POST':
-        # 解析接收的 JSON 数据
-        data = request.json
-        
-        # 接收并存储 JSON 数据，以便显示接收到的数据
-        received_data = data
-
-        # 调用函数来处理数据并生成 OpenDSS 脚本
-        dss_script_filename = generate_dss_script(data)
-
-        # 运行 OpenDSS 计算
-        result = run_opendss(dss_script_filename)
-
-        return jsonify(result)
-    else:
-        # GET 请求，显示接收到的数据
-        return render_template_string("""
-            <!doctype html>
-            <html>
-            <body>
-                <h1>Received JSON Data:</h1>
-                <pre>{{ data }}</pre>
-            </body>
-            </html>
-        """, data=received_data)
-
-def generate_dss_script(data):
-    # 处理 JSON 数据并生成 OpenDSS 脚本
-    # 使用 Jinja2 或其他方法
     
+    # 接收 JSON 数据
+    data = request.json
+    app.config['received_data'] = data
 
-    # 确保 JSON 数据的第一层只有一个键值对
-    if len(data) != 1:
-        raise ValueError("JSON 数据应该只包含一个顶级键")
+    # 生成 OpenDSS 脚本文件, 生成的脚本文件放在工程路径下的opendss_script_files中
+    dss_script_filename = generate_dss_script(data, os.path.join("opendss_script_files"))
+    app.config['opendss_script_file'] = dss_script_filename
 
-    # 获取顶级键名
-    top_level_key = list(data.keys())[0]
-    top_level_data = data[top_level_key]
-    
-    script_filename = f"{top_level_key}.dss"
+    # 运行 OpenDSS 计算
+    result = run_opendss(dss_script_filename)
 
-    from jinja2 import Environment, FileSystemLoader
-    # 设置 Jinja2 环境
-    env = Environment(
-        loader=FileSystemLoader('.'),
-        trim_blocks=True,
-        lstrip_blocks=True
-    )
-    template = env.get_template('opendss_template.j2')
-    opendss_script = template.render(top_level_key=top_level_key, top_level_data=top_level_data)
-    
-    with open(script_filename, "w") as file:
-        file.write(opendss_script)
-                    
-    #print(opendss_script)
-    return script_filename
+    return jsonify(result)
 
 def run_opendss(opendss_script_filename):
 

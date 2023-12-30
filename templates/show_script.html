@@ -1,0 +1,23 @@
+<!-- show_script.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OpenDSS Script File</title>
+    <style>
+        .file-name { font-size: 24px; }
+        .content { 
+            white-space: pre;
+            line-height: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="file-name">{{ filename or "未指定文件" }}</div>
+    <div class="content">
+        {% for line in content %}
+            {{ line }}
+        {% endfor %}
+    </div>
+</body>
+</html>

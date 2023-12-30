@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Display JSON Data</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jsonview/1.2.3/jquery.jsonview.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jsonview/1.2.3/jquery.jsonview.min.js"></script>
+</head>
+<body>
+
+<div id="json-renderer"></div>
+
+<script>
+    $(document).ready(function() {
+        // 获取从 Flask 传递的 JSON 数据
+        var myDict = {{ dict_data | safe }};
+        
+        // 使用 jQuery JSONView 展示数据
+        $("#json-renderer").JSONView(myDict);
+    });
+</script>
+
+</body>
+</html>
