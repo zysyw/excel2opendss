@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EnergyMeter Registers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px; /* 添加边距以防止内容贴近浏览器边缘 */
+        }
+
+        h1 {
+            margin-top: 0; /* 可以调整标题的上边距 */
+        }
+
+        table {
+            width: 60%; /* 设置表格的宽度 */
+            border-collapse: collapse;
+            margin-top: 20px; /* 在标题和表格之间添加上边距 */
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>EnergyMeter Register Data</h1>
+    <table>
+        <tr>
+            <th>Register Name</th>
+            <th>Register Value</th>
+        </tr>
+        {% for name, value in registers %}
+        <tr>
+            <td>{{ name }}</td>
+            <td>{{ value }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

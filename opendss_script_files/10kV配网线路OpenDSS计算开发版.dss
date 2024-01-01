@@ -35,11 +35,16 @@ new transformer.T1 Buses=[bus1, T1] XfmrCode=S9-50
 new transformer.T21 Buses=[bus21, T21] XfmrCode=S9-160
 new transformer.T22 Buses=[bus22, T22] XfmrCode=S9-200
 new transformer.T3 Buses=[bus3, T3] XfmrCode=S9-100
+  ! 曲线
+new loadshape.Sum 24 1.0 pmult=(200,220,240,260,280,300,320,340,360,345,330,315,300,285,270,255,240,225,210,195,180,200,215,230) qmult=(65.26,71.786,78.312,84.838,91.364,97.89,104.416,110.942,117.468,112.5735,107.679,102.7845,97.89,92.9955,88.101,83.2065,78.312,73.4175,68.523,63.6285,58.734,65.26,70.1545,75.049)
+new loadshape.Voltage 24 1.0 pmult=(10.1,10.2,10.3,10.4,10.5,10.6,10.7,10.8,10.9,10.8,10.7,10.6,10.5,10.4,10.3,10.2,10.1,10.2,10.3,10.4,10.5,10.6,10.7,10.8) action=normalize
+Vsource.Source.daily = Voltage
   ! 运行数据
-new load.T1 bus1=T1 kv=0.4 kw=25 kvar=12.5
-new load.T21 bus1=T21 kv=0.4 kw=80 kvar=40
-new load.T22 bus1=T22 kv=0.4 kw=100 kvar=50
-new load.T3 bus1=T3 kv=0.4 kw=50 kvar=25
+new load.T1 bus1=T1 kv=0.4 kw=9.80392156862745E-02 kvar=9.80392156862745E-02 daily=Sum
+new load.T21 bus1=T21 kv=0.4 kw=0.313725490196078 kvar=0.313725490196078 daily=Sum
+new load.T22 bus1=T22 kv=0.4 kw=0.392156862745098 kvar=0.392156862745098 daily=Sum
+new load.T3 bus1=T3 kv=0.4 kw=0.196078431372549 kvar=0.196078431372549 daily=Sum
 
+Set mode=daily number=24 h=3600
 set voltagebases = "110 10 0.38"
 calcv

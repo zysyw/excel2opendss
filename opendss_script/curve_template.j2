@@ -1,0 +1,15 @@
+{# opendss_script\curve_template.j2 #}
+{% for param_dict in category_value %}
+  {% for param_key, param_value in param_dict.items() %}
+    {% if param_key == '负荷曲线' %}
+      {% for load_curve in param_value %}
+new loadshape.{{ load_curve['负荷曲线名称'] }} 24 1.0 pmult={{ load_curve['有功功率(kW)'] }} qmult={{ load_curve['无功功率(kvar)'] }}
+      {% endfor %}
+    {% elif param_key == '电压曲线' %}
+      {% for voltage_curve in param_value %}
+new loadshape.{{ voltage_curve['电压曲线名称'] }} 24 1.0 pmult={{ voltage_curve['电压(kV)'] }} action=normalize
+Vsource.Source.daily = {{ voltage_curve['电压曲线名称'] }}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}

@@ -1,9 +1,10 @@
 import os
 from flask import Flask, request, jsonify
 from opendss_script.generate_dss_script import generate_dss_script
+from opendss_calculation.run_opendss import run_opendss
 from received_data import received_data_bp
 from opendss_script.generate_dss_script import opendss_script_bp
-import opendssdirect as dss
+from opendss_calculation.run_opendss import run_opendss_bp
 
 app = Flask(__name__)
 
@@ -14,10 +15,7 @@ app.config['opendss_script_file'] = None
 # 显示json数据、opendss脚本文件、opendss计算结果的蓝图
 app.register_blueprint(received_data_bp)
 app.register_blueprint(opendss_script_bp)
-
-# 初始化 OpenDSS
-#dss.Basic.Start(0)
-#app.config['dss'] = dss  # 将 OpenDSS 实例存储在 app.config 中
+app.register_blueprint(run_opendss_bp)
 
 @app.route('/')
 def index():
@@ -38,48 +36,6 @@ def process_data():
     result = run_opendss(dss_script_filename)
 
     return jsonify(result)
-
-def run_opendss(opendss_script_filename):
-
-    # 初始化 OpenDSS
-    dss.Basic.Start(0)
-     
-    dss.run_command(f"Redirect [{opendss_script_filename}]")
-
-    dss.Solution.Solve()
-    
-    return {"Load Flow Completed": "Yes" if dss.Solution.Converged() else "No"}
-
-@app.route('/get-voltages')
-def get_opendss_voltages():
-    
-    #print("Load Flow Completed:", "Yes" if dss.Solution.Converged() else "No")
-    voltages = dss.Circuit.AllBusMagPu()
-    #print("Bus Voltages (pu):", voltages)
-    
-    return jsonify(voltages)
-
-@app.route('/get-line-currents')
-def get_line_currents():
-    line_names = dss.Lines.AllNames()
-    currents_data = {}
-
-    for name in line_names:
-        dss.Lines.Name(name)
-        currents = dss.CktElement.CurrentsMagAng()
-        currents_data[name] = currents
-
-    return jsonify(currents_data)
-
-
-@app.route('/get-meters')
-def get_opendss_meters():
-    
-    #print("Load Flow Completed:", "Yes" if dss.Solution.Converged() else "No")
-    meter_values = dss.Meters.RegisterValues()
-    print("Meter Values:", meter_values)
-    
-    return jsonify(meter_values)
 
 if __name__ == "__main__":
     app.run(debug=True)

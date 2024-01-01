@@ -17,8 +17,12 @@ set basefrequency=50
     {% if category_key == '运行数据' %}
       {% include 'running_data_template.j2' %}
     {% endif %}
+    {% if category_key == '曲线' %}
+      {% include 'curve_template.j2' %}
+    {% endif %}
   {% endfor %}
 {% endfor %}
 
+Set mode=daily number=24 h=3600
 set voltagebases = "110 10 0.38"
 calcv

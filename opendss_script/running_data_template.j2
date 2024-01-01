@@ -1,9 +1,9 @@
-{# running_data_template.j2 #}
+{# opendss_script\running_data_template.j2 #}
 {% for param_dict in category_value %}
   {% for param_key, param_value in param_dict.items() %}
     {% if param_key == '负荷' %}
       {% for load in param_value %}
-new load.{{ load['负荷名称'] }} bus1={{ load['负荷母线'] }} kv={{ load['额定电压(kV)'] }} kw={{ load['有功负荷(kW)'] }} kvar={{ load['无功负荷(kVar)'] }}
+new load.{{ load['负荷名称'] }} bus1={{ load['负荷母线'] }} kv={{ load['额定电压(kV)'] }} kw={{ load['有功占比'] }} kvar={{ load['无功占比'] }} daily={{ load['曲线名称'] }}
       {% endfor %}
     {% endif %}
   {% endfor %}
