@@ -3,7 +3,7 @@ import os
 
 opendss_script_bp = Blueprint('opendss_script_bp', __name__)
 
-@opendss_script_bp.route('/show-opendss-script')
+@opendss_script_bp.route('/opendss-script')
 def show_opendss_script():
     # 从配置中获取文件名
     script_file = current_app.config.get('opendss_script_file', '')
