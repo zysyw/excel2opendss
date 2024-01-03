@@ -26,7 +26,7 @@ new XfmrCode.S9-200 phases=3 windings=2 conns=[delta, wye] kVs=[10.5, 0.4] kVAs=
 new transformer.sub phases=3 windings=2 buses=[SourceBus,  nc10kVbus] kvs=[115, 10.5] kvas=[20000, 20000] XHL=7
 new line.L1 bus1=nc10kVbus bus2=bus1 Linecode=LGJ-70 Length=0.8
 ! first meter
-new EnergyMeter.nc10kVbus element=line.L1 1
+new EnergyMeter.L1 element=line.L1 1
 new line.L2 bus1=bus1 bus2=bus2 Linecode=LGJ-70 Length=0.7
 new line.L3 bus1=bus2 bus2=bus3 Linecode=LGJ-70 Length=1
 new line.L4 bus1=bus2 bus2=bus21 Linecode=LGJ-70 Length=0.3

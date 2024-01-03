@@ -6,7 +6,7 @@
 new line.{{ line['线段名称'] }} bus1={{ line['线段头母线'] }} bus2={{ line['线段尾母线'] }} Linecode={{ line['线路型号'] }} Length={{ line['线路长度(km)'] }}
         {% if line['线段名称'] == 'L1' %}
 ! first meter
-new EnergyMeter.{{ line['线段头母线'] }} element=line.{{ line['线段名称'] }} 1
+new EnergyMeter.{{ line['线段名称'] }} element=line.{{ line['线段名称'] }} 1
         {% endif %}
       {% endfor %}
     {% elif param_key == '变压器' %}
