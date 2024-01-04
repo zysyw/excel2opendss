@@ -44,6 +44,8 @@ def get_opendss_meters():
 
 @run_opendss_bp.route('/circut-losses')
 def get_circut_losses():
+    dss.Solution.Number(1)
+    dss.Solution.Solve()
     # 收集 EnergyMeter 数据
     dss.Meters.First()
     meter_data = {}
