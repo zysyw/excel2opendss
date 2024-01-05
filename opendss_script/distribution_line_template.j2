@@ -11,12 +11,15 @@ new EnergyMeter.{{ line['线段名称'] }} element=line.{{ line['线段名称'] 
       {% endfor %}
     {% elif param_key == '变压器' %}
       {% for transformer in param_value %}
-new transformer.{{ transformer['变压器名称'] }} Buses=[{{ transformer['高压侧母线'] }}, {{ transformer['低压侧母线'] }}] XfmrCode={{ transformer['变压器类型'] }}-{{ transformer['变压器容量(kVA)'] }}
+new transformer.{{ transformer['变压器名称'] }}{% if transformer['是否公变'] == '是' %}publictransformer{% endif %} Buses=[{{ transformer['高压侧母线'] }}, {{ transformer['低压侧母线'] }}] XfmrCode={{ transformer['变压器类型'] }}-{{ transformer['变压器容量(kVA)'] }}
+        {% if transformer['是否公变'] == '是' %}
+new EnergyMeter.{{ transformer['变压器名称'] }} Element=transformer.{{ transformer['变压器名称'] }}publictransformer Terminal=1
+        {% endif %}
       {% endfor %}
     {% elif param_key == '平衡节点' %}
       {% for BalanceBus in param_value %}
 ! substation transformer
-new transformer.sub phases=3 windings=2 buses=[SourceBus,  {{ BalanceBus['平衡节点'] }}] kvs=[115, 10.5] kvas=[20000, 20000] XHL=7
+new transformer.sub1 phases=3 windings=2 buses=[SourceBus,  {{ BalanceBus['平衡节点'] }}] kvs=[115, 10.5] kvas=[20000, 20000] XHL=7
       {% endfor %}
     {% endif %}
   {% endfor %}

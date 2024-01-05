@@ -23,7 +23,7 @@ new XfmrCode.S9-160 phases=3 windings=2 conns=[delta, wye] kVs=[10.5, 0.4] kVAs=
 new XfmrCode.S9-200 phases=3 windings=2 conns=[delta, wye] kVs=[10.5, 0.4] kVAs=[200, 200] XHL=4 %imag=1.3 %noloadloss=0.24 %loadloss=1.3
   ! 配电线路
 ! substation transformer
-new transformer.sub phases=3 windings=2 buses=[SourceBus,  nc10kVbus] kvs=[115, 10.5] kvas=[20000, 20000] XHL=7
+new transformer.sub1 phases=3 windings=2 buses=[SourceBus,  nc10kVbus] kvs=[115, 10.5] kvas=[20000, 20000] XHL=7
 new line.L1 bus1=nc10kVbus bus2=bus1 Linecode=LGJ-70 Length=0.8
 ! first meter
 new EnergyMeter.L1 element=line.L1 1
@@ -33,7 +33,8 @@ new line.L4 bus1=bus2 bus2=bus21 Linecode=LGJ-70 Length=0.3
 new line.L5 bus1=bus21 bus2=bus22 Linecode=LGJ-70 Length=0.5
 new transformer.T1 Buses=[bus1, T1] XfmrCode=S9-50
 new transformer.T21 Buses=[bus21, T21] XfmrCode=S9-160
-new transformer.T22 Buses=[bus22, T22] XfmrCode=S9-200
+new transformer.T22publictransformer Buses=[bus22, T22] XfmrCode=S9-200
+new EnergyMeter.T22 Element=transformer.T22publictransformer Terminal=1
 new transformer.T3 Buses=[bus3, T3] XfmrCode=S9-100
   ! 曲线
 new loadshape.Sum 24 1.0 pmult=(200,220,240,260,280,300,320,340,360,345,330,315,300,285,270,255,240,225,210,195,180,200,215,230) qmult=(65.26,71.786,78.312,84.838,91.364,97.89,104.416,110.942,117.468,112.5735,107.679,102.7845,97.89,92.9955,88.101,83.2065,78.312,73.4175,68.523,63.6285,58.734,65.26,70.1545,75.049)
